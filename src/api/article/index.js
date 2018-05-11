@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { middleware as query } from 'querymen'
 import { middleware as body } from 'bodymen'
-import { master } from '../../services/passport'
+import { token } from '../../services/passport'
 import { create, index, show, update, destroy } from './controller'
 import { schema } from './model'
 export Article, { schema } from './model'
@@ -13,17 +13,17 @@ const { title, content } = schema.tree
  * @api {post} /articles Create article
  * @apiName CreateArticle
  * @apiGroup Article
- * @apiPermission master
- * @apiParam {String} access_token master access token.
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
  * @apiParam title Article's title.
  * @apiParam content Article's content.
  * @apiSuccess {Object} article Article's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Article not found.
- * @apiError 401 master access only.
+ * @apiError 401 user access only.
  */
 router.post('/',
-  master(),
+  token({ required: true }),
   body({ title, content }),
   create)
 
@@ -54,17 +54,17 @@ router.get('/:id',
  * @api {put} /articles/:id Update article
  * @apiName UpdateArticle
  * @apiGroup Article
- * @apiPermission master
- * @apiParam {String} access_token master access token.
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
  * @apiParam title Article's title.
  * @apiParam content Article's content.
  * @apiSuccess {Object} article Article's data.
  * @apiError {Object} 400 Some parameters may contain invalid values.
  * @apiError 404 Article not found.
- * @apiError 401 master access only.
+ * @apiError 401 user access only.
  */
 router.put('/:id',
-  master(),
+  token({ required: true }),
   body({ title, content }),
   update)
 
@@ -72,14 +72,14 @@ router.put('/:id',
  * @api {delete} /articles/:id Delete article
  * @apiName DeleteArticle
  * @apiGroup Article
- * @apiPermission master
- * @apiParam {String} access_token master access token.
+ * @apiPermission user
+ * @apiParam {String} access_token user access token.
  * @apiSuccess (Success 204) 204 No Content.
  * @apiError 404 Article not found.
- * @apiError 401 master access only.
+ * @apiError 401 user access only.
  */
 router.delete('/:id',
-  master(),
+  token({ required: true }),
   destroy)
 
 export default router

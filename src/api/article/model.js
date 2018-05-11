@@ -1,6 +1,11 @@
 import mongoose, { Schema } from 'mongoose'
 
 const articleSchema = new Schema({
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User',
+    required: true
+  },
   title: {
     type: String
   },
@@ -20,6 +25,7 @@ articleSchema.methods = {
     const view = {
       // simple view
       id: this.id,
+      user: this.user.view(full),
       title: this.title,
       content: this.content,
       createdAt: this.createdAt,
